@@ -85,6 +85,7 @@
         $.ajax({
             url: "https://gri.nanoc.ml", async: false, success: function (result) {
                 abroad_ip = result;
+                $('#out').html(abroad_ip);
                 $('.progress').css('width', '33%');
                 get_ip_detail(abroad_ip);
             }, error: function () {
@@ -109,9 +110,8 @@
 
     function get_ip_detail(ip) {
         $.ajax({
-            url: "https://oci.nanoc.ml/json/" + ip, async: false, contentType: JSON, success: function (result) {
+            url: "https://ocr.nanoc.ml/json/" + ip, async: false, contentType: JSON, success: function (result) {
                 console.log(result);
-                $('#out').html(result['query']);
                 let msg = result['country'] + ' ' + result['regionName'] + '<br/>' + result['timezone'] + '<br/>' + result['as'];
                 $('.outinfo').html(msg)
                 // console.log(msg);
