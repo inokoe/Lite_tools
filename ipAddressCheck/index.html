@@ -83,7 +83,7 @@
     $(document).ready(() => {
         let abroad_ip;
         $.ajax({
-            url: "https://get-request-ip.mine.workers.dev/", async: false, success: function (result) {
+            url: "https://gri.nanoc.ml", async: false, success: function (result) {
                 abroad_ip = result;
                 $('.progress').css('width', '33%');
                 get_ip_detail(abroad_ip);
@@ -109,7 +109,7 @@
 
     function get_ip_detail(ip) {
         $.ajax({
-            url: "https://other-country-ip.mine.workers.dev/json/" + ip, async: false, contentType: JSON, success: function (result) {
+            url: "https://oci.nanoc.ml/json/" + ip, async: false, contentType: JSON, success: function (result) {
                 console.log(result);
                 $('#out').html(result['query']);
                 let msg = result['country'] + ' ' + result['regionName'] + '<br/>' + result['timezone'] + '<br/>' + result['as'];
