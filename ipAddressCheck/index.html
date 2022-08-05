@@ -39,22 +39,37 @@
             transition: all 0.3s linear;
         }
 
-        .in>span:nth-child(1),
-        .out>span:nth-child(1) {
-            display: inline-block;
-            width: 300px;
-            text-align: start;
+        .in.on {
+            width: 600px;
+        }
 
-            ;
+        .status {
+            width: 60%;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .status>span:nth-child(1) {
+            display: inline-block;
+            width: 60%;
+            text-align: start;
         }
 
         .info {
             margin: 0 auto;
-            width: 450px;
+            width: 60%;
             min-height: 50px;
             background-color: rgba(0, 0, 0, 0.5);
             color: white;
             transition: all 0.5s linear;
+        }
+
+        @media screen and (max-width:750px) {
+            .status>span:nth-child(1) {
+                width: 100%;
+                display: block;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -62,14 +77,11 @@
 <body>
     <div class="container">
         <div class="progress"></div>
-        <!-- <div class="in">
-            <span>China mainLand:</span>
-            <span id="in">Please wait.</span>
-            <div class="info ininfo"></div>
-        </div> -->
         <div class="out">
-            <span>Abroad_IP:</span>
-            <span id="out">Please wait.</span>
+            <div class="status">
+                <span>Abroad_IP:</span>
+                <span id="out">Please wait.</span>
+            </div>
             <div class="info outinfo"></div>
         </div>
     </div>
@@ -92,20 +104,6 @@
                 $('.outinfo').html('Request error,Please check internet or shutdown ADblock.')
             }
         });
-
-        // $.ajax({
-        //     url: "https://gamematrix.qq.com/sdk/v2/get_gateway", async: false, contentType: JSON, success: function (result) {
-        //         console.log(result);
-        //         $('#out').html(result['client_ip']);
-        //         // let msg = result['pro'] + ' ' + result['city'];
-        //         // $('.outinfo').html(msg)
-        //         // console.log(msg);
-        //         $('.progress').css('width', '100%');
-
-        //     }, error: function () {
-        //         $('.ininfo').html('Request error,Please check internet or shutdown ADblock.')
-        //     }
-        // });
     })
 
     function get_ip_detail(ip) {
