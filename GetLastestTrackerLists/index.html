@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GetLastestTrackerLists</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100%;
+            width: 100%;
+            position: relative;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            position: relative;
+        }
+
+        .head {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background-color: beige;
+        }
+
+        .head h1 {
+            text-align: center;
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+            text-overflow: ellipsis;
+        }
+
+        .container {
+            padding-top: 70px;
+            width: 600px;
+            height: auto;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .textarea {
+            height: 300px;
+            width: 100%;
+        }
+
+        button {
+            appearance: none;
+            background-color: hotpink;
+            height: 50px;
+            width: 100px;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            box-shadow: 5px 0px 5px grey;
+            user-select: none;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        button:active {
+            transform: translateY(3px);
+            transition: all 0.2s linear;
+        }
+
+        .button {
+            width: 100%;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+
+        h2 {
+            display: inline-block;
+            height: 30px;
+            line-height: 30px;
+        }
+
+        textarea {
+            font-size: 5px;
+            border-radius: 5px;
+            border: 2px dotted black;
+            scroll-behavior: smooth;
+        }
+
+        .progressLine {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0px;
+            height: 3px;
+            z-index: 99;
+            background-image: linear-gradient(to right, hotpink, yellow);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .infobar {
+            padding-bottom: 10px;
+        }
+
+        .message {
+            float: right;
+            height: 30px;
+            line-height: 30px;
+            background-color: rgb(232, 139, 89);
+            border-radius: 5px;
+            color: white;
+            width: 150px;
+            text-align: center;
+            opacity: 0;
+        }
+
+        .showMsg {
+            animation: showMsg 0.5s linear;
+        }
+
+        @keyframes showMsg {
+            0% {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @media screen and (max-width:800px) {
+            .container {
+                width: 400px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="progressLine"></div>
+    <section class="head">
+        <h1>GetLastestTrackerLists</h1>
+    </section>
+    <div class="container">
+        <div class="infobar">
+            <h2 class="subtitle" id="update">
+                Now The Tracker List is Calculating...
+            </h2>
+            <span id="message" class="message">Copy Success</span>
+        </div>
+
+        <textarea id="list" value="" class="textarea"
+            placeholder=" Tracker List is Calculating - Please Wait ~ "></textarea>
+
+        <div class="button">
+            <button style="display: none;" id="copy" data-clipboard-target="#list">
+                Copy List
+            </button>
+            <button id="origin">
+                Copy List(origin)
+            </button>
+            <button id="aria2">
+                Copy List(aria2)
+            </button>
+        </div>
+
+        <p class="subtitle">
+            <strong>The Tracker List Auto Collect From Project below:</strong>
+        </p>
+        <pre>
+https://github.com/DeSireFire/animeTrackerList
+https://github.com/XIU2/TrackersListCollection
+https://github.com/ngosang/trackerslist
+            </pre>
+
+    </div>
+</body>
+
+</html>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+<script>
+    let arr = [];
+    let sto = null;
+    $(document).ready(function () {
+        var clipboard = new ClipboardJS('#copy');
+        listA = $.ajax({ url: "https://raw.githubusercontent.com/DeSireFire/animeTrackerList/master/AT_all.txt", async: false });
+        $('.progressLine').css('width', '20%');
+        listB = $.ajax({ url: "https://trackerslist.com/all.txt", async: false });
+        $('.progressLine').css('width', '40%');
+        listC = $.ajax({ url: "https://ngosang.github.io/trackerslist/trackers_all.txt", async: false });
+        $('.progressLine').css('width', '80%');
+        listA = listA.responseText.replace(/[\r\n]/g, "");
+        listB = listB.responseText.replace(/[\r\n]/g, "");
+        listC = listC.responseText.replace(/[\r\n]/g, "");
+        listA += listB + listC;
+        listA = listA.replace(/http/g, "*|*|*\r\nhttp").replace(/udp/g, "*|*|*\r\nudp").replace(/wss:\/\//g, "*|*|*\r\nwss://").replace(/ws:\/\//g, "*|*|*\r\nws://").replace("*|*|*\r\n", "");
+        arr = listA.split("*|*|*");
+        for (let i = 0, len = arr.length; i < len; i++) {
+            for (let j = i + 1; j < len; j++) {
+                if (arr[i] == arr[j]) {
+                    arr.splice(j, 1);
+                    len--;
+                    j--;
+                }
+            }
+        }
+        $('.progressLine').css('width', '100%');
+        $("#list").html(arr);
+        $("#update").html("Done & Length is " + arr.length);
+        $("#aria2").click(function () {
+            $("#list").html(arr.toString().replace(/[\r\n]/g, ""));
+            $("#copy").click();
+            $('#message').removeClass('showMsg');
+            if (sto != null) clearTimeout(sto);
+            sto = setTimeout(() => { $('#message').addClass('showMsg'); }, 100)
+        });
+        $("#origin").click(function () {
+            $("#list").html(arr);
+            $("#copy").click();
+            $('#message').removeClass('showMsg');
+            if (sto != null) clearTimeout(sto);
+            sto = setTimeout(() => { $('#message').addClass('showMsg'); }, 100)
+        });
+    });
+</script>

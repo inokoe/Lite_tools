@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lite Tools</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100%;
+            width: 100%;
+            position: relative;
+            background-color: grey;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        .header {
+            width: 100%;
+            height: 50px;
+            background-color: aliceblue;
+            text-align: center;
+            line-height: 50px;
+            position: fixed;
+            top: 0;
+        }
+
+        .container {
+            height: auto;
+            width: 100%;
+            display: flex;
+            margin-top: 60px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            flex-direction: column;
+        }
+
+        .container>div {
+            height: 50px;
+            width: 600px;
+            line-height: 50px;
+            background-color: white;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            padding: 0 5px;
+        }
+
+        .container>div>h2 {
+            display: inline;
+        }
+
+        .container>div>span {
+            float: right;
+            flex: 1;
+            font-size: 14px;
+        }
+
+        @media screen and (max-width:700px) {
+            .container>div {
+                width: 500px;
+            }
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+            position: relative;
+        }
+
+        a:active {
+            color: cadetblue;
+            transition: all 0.5s ease-in-out;
+        }
+
+        a:focus {
+            color: blueviolet;
+            transition: all 0.5s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <h1>Lite Tools</h1>
+    </header>
+    <div class="container">
+        <div>
+            <h2><a href="GetLastestTrackerLists/index.html" target="_blank">GetLastestTrackerLists</a></h2>
+            <span>BitTorrent TrackerLists</span>
+        </div>
+        <div>
+            <h2><a href="MagenetExtract/index.html" target="_blank">MagnetExtract</a></h2>
+            <span>Extract BitTorrent Links From the text</span>
+        </div>
+
+    </div>
+</body>
+
+</html>

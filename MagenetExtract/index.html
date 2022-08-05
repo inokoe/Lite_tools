@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MagnetExtract</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100%;
+            width: 100%;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background-color: antiquewhite;
+        }
+
+        header {
+            width: 100%;
+            height: 50px;
+            background-color: gray;
+            color: white;
+        }
+
+        h1 {
+            text-align: center;
+            height: 50px;
+            line-height: 50px;
+        }
+
+        .container {
+            width: 600px;
+            height: auto;
+            padding-top: 70px;
+            margin: 0 auto;
+        }
+
+        textarea {
+            width: 100%;
+            height: 300px;
+            scroll-behavior: smooth;
+            border-radius: 20px;
+            padding: 20px;
+            border: 2px dotted gainsboro;
+            box-shadow: 0 0 10px gray;
+        }
+
+        .infoBar {
+            padding-bottom: 10px;
+            height: 50px
+        }
+
+        .infoBar>h2 {
+            height: 50px;
+            display: inline;
+            line-height: 50px;
+        }
+
+        .selecter {
+            float: right;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #sider-input {
+            appearance: none;
+            background: linear-gradient(75deg, #3c40c6, #575fcf);
+            width: 100px;
+            height: 12px;
+            border-radius: 20px;
+            outline: none;
+            box-shadow: 0 0 6px rgb(28, 32, 148);
+        }
+
+        #sider-input::-webkit-slider-thumb {
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            background: #f53b57;
+            border-radius: 50%;
+            transition: all 0.3s linear;
+        }
+
+        #sider-input:active::-webkit-slider-thumb {
+            background: #ef5777;
+            box-shadow: 0 0 0 6px rgba(155, 73, 146, 0.4);
+        }
+
+        .selected {
+            display: inline-block;
+            margin-right: 16px;
+            background-color: #f53b57;
+            width: 40px;
+            line-height: 25px;
+            text-align: center;
+            border-radius: 4px;
+            color: white;
+            position: relative;
+        }
+
+        .selected::after {
+            content: '';
+            position: absolute;
+            display: block;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-left: 8px solid #f53b57;
+            right: -6px;
+            top: calc((20%));
+        }
+
+        .success {
+            animation: success 1s linear;
+            animation-delay: 100ms;
+        }
+
+        @keyframes success {
+            0% {
+                color: white;
+            }
+
+            70% {
+                color: greenyellow;
+            }
+
+            100% {
+                color: white;
+            }
+        }
+
+        button {
+            height: 40px;
+            width: 100%;
+            background-color: #ef5777;
+            border-radius: 20px;
+            margin-top: 30px;
+            font-size: 30px;
+            box-shadow: 0 5px 5px #ef5777;
+            position: relative;
+        }
+
+        button:active {
+            transform: translateY(5px);
+            transition: all 0.4s linear;
+        }
+
+        .copyMsg {
+            position: absolute;
+            right: 0;
+            top: 70px;
+            height: 30px;
+            width: 150px;
+            background-color: #f53b57;
+            text-align: center;
+            color: white;
+            line-height: 30px;
+            display: none;
+            border-top-left-radius: 50px;
+            border-bottom-left-radius: 50px;
+            transition: all 0.2s linear;
+        }
+
+        @media screen and (max-width:800px) {
+            .container {
+                width: 400px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="copyMsg">Done</div>
+    <header>
+        <h1 class="titile">MagnetExtract</h1>
+    </header>
+    <section class="container">
+        <div class="infoBar">
+            <h2>Welcome!</h2>
+            <div class="selecter">
+                <span class="selected">100%</span>
+                <input type="range" id="sider-input" min="0" max="100" value="100">
+            </div>
+        </div>
+        <textarea name="text" id="text" required placeholder="Please input text..."></textarea>
+        <textarea name="hidden" id="hidden" style="top:0;left:0;width:0px;height:0px;position: absolute;opacity: 0;"
+            placeholder="Please input text..."></textarea>
+        <button id="run">Extract</button>
+    </section>
+</body>
+
+</html>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $("#run").click(function () {
+            Extract();
+        });
+        $('#sider-input').change(() => {
+            $('.selected').html($('#sider-input').val() + '%');
+        })
+    });
+
+    function Extract() {
+        let value = $('#text').val();
+        // console.log('value', value)
+        let arr = value.match(/magnet:\?xt=urn:btih:[A-Za-z0-9]+(.+announce)?/g);
+        // console.log(arr);
+        if (arr != null) {
+            $('h1').stop();
+            $('h1').removeClass('success');
+            setTimeout(() => {
+                $('h1').addClass('success');
+            }, 10);
+            $('h2').html('Counts: ' + arr.length + ' and Copy ' + Math.ceil(arr.length * $('#sider-input').val() / 100));
+            arr = arr.slice(0, Math.ceil(arr.length * $('#sider-input').val() / 100) + 1);
+            for (let x = 0; x < arr.length; x++) {
+                arr[x] = arr[x] + '\r\n';
+            }
+            console.log(arr.length);
+            $('#hidden').html(arr);
+            $('#hidden').select();
+            console.log(document.execCommand('copy', true))
+            $('.copyMsg').toggle();
+            setTimeout(() => { $('.copyMsg').toggle(); }, 500);
+        }
+    }
+</script>
