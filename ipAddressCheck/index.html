@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ipAddressCheck</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            background-color: grey;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-size: large;
+        }
+
+        .container {
+            width: 600px;
+            text-align: center;
+            position: relative;
+        }
+
+        .progress {
+            width: 0%;
+            height: 4px;
+            position: fixed;
+            background-color: white;
+            top: 0;
+            left: 0;
+            transition: all 0.3s linear;
+        }
+
+        .in>span:nth-child(1),
+        .out>span:nth-child(1) {
+            display: inline-block;
+            width: 300px;
+            text-align: start;
+
+            ;
+        }
+
+        .info {
+            margin: 0 auto;
+            width: 450px;
+            min-height: 50px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            transition: all 0.5s linear;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="progress"></div>
+        <!-- <div class="in">
+            <span>China mainLand:</span>
+            <span id="in">Please wait.</span>
+            <div class="info ininfo"></div>
+        </div> -->
+        <div class="out">
+            <span>Abroad_IP:</span>
+            <span id="out">Please wait.</span>
+            <div class="info outinfo"></div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+    $(document).ready(() => {
+        let abroad_ip;
+        $.ajax({
+            url: "https://get-request-ip.mine.workers.dev/", async: false, success: function (result) {
+                abroad_ip = result;
+                $('.progress').css('width', '33%');
+                get_ip_detail(abroad_ip);
+            }, error: function () {
+                $('.outinfo').html('Request error,Please check internet or shutdown ADblock.')
+            }
+        });
+
+        // $.ajax({
+        //     url: "https://gamematrix.qq.com/sdk/v2/get_gateway", async: false, contentType: JSON, success: function (result) {
+        //         console.log(result);
+        //         $('#out').html(result['client_ip']);
+        //         // let msg = result['pro'] + ' ' + result['city'];
+        //         // $('.outinfo').html(msg)
+        //         // console.log(msg);
+        //         $('.progress').css('width', '100%');
+
+        //     }, error: function () {
+        //         $('.ininfo').html('Request error,Please check internet or shutdown ADblock.')
+        //     }
+        // });
+    })
+
+    function get_ip_detail(ip) {
+        $.ajax({
+            url: "https://other-country-ip.mine.workers.dev/json/" + ip, async: false, contentType: JSON, success: function (result) {
+                console.log(result);
+                $('#out').html(result['query']);
+                let msg = result['country'] + ' ' + result['regionName'] + '<br/>' + result['timezone'] + '<br/>' + result['as'];
+                $('.outinfo').html(msg)
+                // console.log(msg);
+                $('.progress').css('width', '100%');
+
+            }, error: function () {
+                $('.outinfo').html('Request error,Please check internet or shutdown ADblock.')
+            }
+        });
+    }
+</script>
