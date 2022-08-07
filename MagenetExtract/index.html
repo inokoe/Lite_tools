@@ -52,7 +52,8 @@
 
         .infoBar {
             padding-bottom: 10px;
-            height: 50px
+            min-height: 50px;
+            max-height: 100px;
         }
 
         .infoBar>h2 {
@@ -153,24 +154,55 @@
 
         .copyMsg {
             position: absolute;
-            right: 0;
+            right: 10px;
             top: 70px;
             height: 30px;
             width: 150px;
-            background-color: #f53b57;
+            background-color: #575fcf;
             text-align: center;
             color: white;
             line-height: 30px;
             display: none;
-            border-top-left-radius: 50px;
-            border-bottom-left-radius: 50px;
-            transition: all 0.2s linear;
+            border-radius: 50px;
+            transition: all 1s linear;
+            animation: shine 1s ease-in-out;
+            /* animation-fill-mode: forwards; */
+        }
+
+        @keyframes shine {
+            0% {
+                opacity: 1;
+            }
+
+            30% {
+                opacity: 0.4;
+            }
+
+            60% {
+                opacity: 0.8;
+            }
+
+            100% {
+                opacity: 1;
+            }
         }
 
         @media screen and (max-width:900px) {
             .container {
                 width: 90%;
             }
+
+            .selecter {
+                float: left;
+            }
+
+            .infoBar>h2 {
+                display: block;
+            }
+        }
+
+        #text {
+            transition: all 0.7s linear;
         }
     </style>
 </head>
@@ -201,6 +233,7 @@
 
 
 <script>
+    let timeout;
     $(document).ready(function () {
         $("#run").click(function () {
             Extract();
@@ -221,7 +254,7 @@
             setTimeout(() => {
                 $('h1').addClass('success');
             }, 10);
-            $('h2').html('Counts: ' + arr.length + ' and Copy ' + Math.ceil(arr.length * $('#sider-input').val() / 100));
+            $('h2').html('Counts ' + arr.length + ' and Copy ' + Math.ceil(arr.length * $('#sider-input').val() / 100));
             arr = arr.slice(0, Math.ceil(arr.length * $('#sider-input').val() / 100) + 1);
             for (let x = 0; x < arr.length; x++) {
                 arr[x] = arr[x] + '\r\n';
@@ -230,8 +263,15 @@
             $('#hidden').html(arr);
             $('#hidden').select();
             console.log(document.execCommand('copy', true))
+            $('.copyMsg').html('Computational success');
             $('.copyMsg').toggle();
-            setTimeout(() => { $('.copyMsg').toggle(); }, 500);
+            setTimeout(() => { $('.copyMsg').toggle(); }, 1000);
+            $('#text').css('background-color', 'rgba(34, 201, 31, 0.2)')
+        } else {
+            $('#text').css('background-color', 'rgba(239, 12, 12,0.2)');
+            $('.copyMsg').html('Nothing was found');
+            $('.copyMsg').toggle();
+            setTimeout(() => { $('.copyMsg').toggle(); }, 1000);
         }
     }
 </script>
